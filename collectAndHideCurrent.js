@@ -24,12 +24,13 @@ function CollectAndHide()
     {
         if ( layM.layerVisibility( currentPanelId, j ) == true )
         {
-            //  delLayers += (" Scene: " + sM.nameOfScene( sM.sceneIdOfPanel( currentPanelId ) ) 
-            //            + "    Panel: " + sM.nameOfPanel( currentPanelId ) 
-            //            + "    Layer: " + layM.layerName( currentPanelId, j ) 
-            //            + "\n" );
-            visibleLayers.push(layM.layerName( currentPanelId, j ));
-            //layM.deleteLayer( currentPanelId, j );
+            if (layM.isEmpty(currentPanelId, j) == false)
+            {
+                if (layM.isGroupLayer(currentPanelId, j) == false)
+                {
+                    visibleLayers.push(layM.layerName( currentPanelId, j ));
+                }
+            }
         }
     }
     
@@ -39,12 +40,14 @@ function CollectAndHide()
 
     for (var iLayer = 0; iLayer < visibleLayers.length; iLayer++)
     {
-        var iCurrentLayer = layM.layerIndexFromName(currentPanelId, visibleLayers[iLayer]);
+        var currentLayerName = visibleLayers[iLayer];
+        var iCurrentLayer = layM.layerIndexFromName(currentPanelId, currentLayerName);
         var iGroup = layM.layerIndexFromName(currentPanelId, groupName);
-        layM.setLayerVisible(currentPanelId, iCurrentLayer, false);// hide all the layers
+        layM.setLayerVisible(currentPanelId, iCurrentLayer, false);// hide all layer
+        layM.renameLayer(currentPanelId, iCurrentLayer, currentLayerName + "_"); // rename the layer
         layM.moveLayerInGroup(currentPanelId, iCurrentLayer, iGroup);  // move all the layers into the group layer - invalidates index!
-        // rename all the layers
-        // create new blank versions of the layers
+        layM.addVectorLayer(currentPanelId, iLayer, true, currentLayerName); // create new blank versions of the layers
+        // note iLayer in the above to put them in forward order
     }
 
     
