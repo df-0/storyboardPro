@@ -28,22 +28,32 @@ function CollectAndHide()
             {
                 if (layM.isGroupLayer(currentPanelId, j) == false)
                 {
-                    visibleLayers.push(layM.layerName( currentPanelId, j ));
+                    if (layM.groupOfLayer(currentPanelId, j)==-1)
+                    {
+                        visibleLayers.push(layM.layerName( currentPanelId, j ));
+                    }
                 }
             }
         }
     }
     
     // file:///C:/Program%20Files%20(x86)/Toon%20Boom%20Animation/Toon%20Boom%20Storyboard%20Pro%2024/help/storyboard/classLayerManager.html#a85bbc8fb35167cd5a94b21992bb0f2b9
+    
+    if (visibleLayers.length==0){
+        return;
+    }
+
     layM.addGroupLayer (currentPanelId, layM.numberOfLayers(currentPanelId) - 1, false, "version"); // add a group layer
-    var groupName = layM.layerName(currentPanelId, layM.numberOfLayers(currentPanelId)-1);
+    var groupIndex = layM.numberOfLayers(currentPanelId)-1;
+    var groupName = layM.layerName(currentPanelId, groupIndex);
+
 
     for (var iLayer = 0; iLayer < visibleLayers.length; iLayer++)
     {
         var currentLayerName = visibleLayers[iLayer];
         var iCurrentLayer = layM.layerIndexFromName(currentPanelId, currentLayerName);
         var iGroup = layM.layerIndexFromName(currentPanelId, groupName);
-        layM.setLayerVisible(currentPanelId, iCurrentLayer, false);// hide all layer
+        //layM.setLayerVisible(currentPanelId, iCurrentLayer, false);// hide all layer
         layM.renameLayer(currentPanelId, iCurrentLayer, currentLayerName + "_"); // rename the layer
         layM.moveLayerInGroup(currentPanelId, iCurrentLayer, iGroup);  // move all the layers into the group layer - invalidates index!
         layM.addVectorLayer(currentPanelId, iLayer, true, currentLayerName); // create new blank versions of the layers
@@ -51,7 +61,8 @@ function CollectAndHide()
     }
 
     
-    
+    var groupIndex = layM.layerIndexFromName(currentPanelId, groupName);
+    layM.setLayerVisible(currentPanelId, groupIndex, false)
 
     
 
