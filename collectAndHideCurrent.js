@@ -20,6 +20,7 @@ function CollectAndHide()
     var currentPanelId = panelIds[0];
     MessageLog.trace(currentPanelId);
     var visibleLayers = []
+    // get a list of all the visible layers
     for ( var j =  layM.numberOfLayers( currentPanelId ) - 1; j >= 0; --j )
     {
     if ( layM.layerVisibility( currentPanelId, j ) == true )
@@ -31,6 +32,18 @@ function CollectAndHide()
         visibleLayers.push(layM.layerName( currentPanelId, j ));
             //layM.deleteLayer( currentPanelId, j );
     }
+
+    // file:///C:/Program%20Files%20(x86)/Toon%20Boom%20Animation/Toon%20Boom%20Storyboard%20Pro%2024/help/storyboard/classLayerManager.html#a85bbc8fb35167cd5a94b21992bb0f2b9
+    MessageLog.trace("adding group layer");
+    addGroupLayer (currentPanelId, layM.numberOfLayers( currentPanelId ) - 1, false, "version_000"); // add a group layer
+    MessageLog.trace("Done!");
+
+    // move all the layers into the group layer
+    // hide all the layers
+    // rename all the layers
+    // create new blank versions of the layers
+
+    
     MessageLog.trace(visibleLayers);
     }
 
@@ -53,3 +66,6 @@ function CollectAndHide()
 
     project.endUndoRedoAccum();
 }
+
+// TESTING ONLY HACK
+CollectAndHide();
